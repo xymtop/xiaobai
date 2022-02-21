@@ -75,8 +75,7 @@ public class MyHttp {
     public static void DownLoadMsg(String msg) throws IOException, NoSuchAlgorithmException {
 
         msg = URLEncoder.encode(msg, "UTF-8");
-        String url = "https://fanyi.sogou.com/reventondc/synthesis?text=" + msg
-                + "&speed=1&lang=zh-CHS&from=translateweb&speaker=6%22";
+        String url = "https://tts.youdao.com/fanyivoice?word=" + msg + "&le=zh&keyfrom=speaker-target";
         System.out.println(url);
         msg = URLDecoder.decode(msg, "UTF-8");
         MyHttp.downLoadFromUrl(url, msg + ".mp3", "res/msg/");

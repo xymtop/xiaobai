@@ -5,7 +5,7 @@ import java.io.IOException;
 public class WallPaper {
     public static void ChangeOne() {
         // 先随机产生一个下标再获取元素
-        String random = "";
+
         int index = (int) (Math.random() * 20);
 
         String url = System.getProperty("user.dir") + "\\res\\wall\\wall (" + String.valueOf(index) + ").jpg";

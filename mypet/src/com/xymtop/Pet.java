@@ -17,17 +17,19 @@ public class Pet {
     static Point mouse = new Point();
     static int WinH = 200;
     static int WinW = 200;
+    static int SleepTime = 10;
     // falg
     boolean flag = true;
     // 人物是否活动
     boolean active = false;
     // 消息窗口是否打开
-    boolean msgui = false;
+    boolean msgui = true;
     // 窗口是否隐藏
     boolean ishide = false;
 
     public Pet() {
         frame = new JFrame("小白");
+        Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\start.mp3");
         msg = new MsgUi();
         popup = new JPopupMenu();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,12 +65,27 @@ public class Pet {
                     if (e.getButton() == 2) {
                         JPopupMenu popup = new JPopupMenu();
                         JMenuItem wall = new JMenuItem("更换专属壁纸");
+                        JMenuItem chat = new JMenuItem("和我聊天");
                         JMenuItem help = new JMenuItem("帮助");
                         JMenuItem about = new JMenuItem("关于");
                         JMenuItem hide = new JMenuItem("隐藏");
                         JMenuItem exit = new JMenuItem("退出");
 
                         // 菜单点击事件
+                        chat.addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                // reg add "hkcu\control panel\desktop" /v wallpaper /d "新壁纸地址(绝对地址）" /f
+                                if (msgui) {
+                                    msg.SetView(true);
+                                } else {
+                                    msg = new MsgUi();
+                                }
+                            }
+
+                        });
                         wall.addActionListener(new ActionListener() {
 
                             @Override
@@ -85,7 +102,7 @@ public class Pet {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 // TODO Auto-generated method stub
-
+                                Util.OpenUrl("https://xymtop.gitee.io/xiaobai/#/");
                             }
 
                         });
@@ -95,7 +112,7 @@ public class Pet {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 // TODO Auto-generated method stub
-
+                                Util.OpenUrl("https://gitee.com/xymtop/xiaobai");
                             }
 
                         });
@@ -121,7 +138,7 @@ public class Pet {
                             }
 
                         });
-
+                        popup.add(chat);
                         popup.add(wall);
                         popup.add(help);
                         popup.add(about);
@@ -215,23 +232,25 @@ public class Pet {
     private void ChangeImgThread() {
         new Thread() {
             public void run() {
-                for (int i = 0; i <= 300; i++) {
-                    System.out.println(i);
-                    if (i / 60 == 0) {
+                while (true) {
+                    // for (int i = 0; i <= 300; i++) {
+                    int i = (int) (Math.random() * 5);
+                    if (i == 0) {
                         Default();
-                    } else if (i % 60 == 1) {
+                    } else if (i == 1) {
                         Walking();
-                    } else if (i % 60 == 2) {
+                    } else if (i == 2) {
                         ClickOne();
-                    } else if (i % 60 == 3) {
+                    } else if (i == 3) {
                         WalkDrop();
-                    } else if (i % 60 == 4) {
+                    } else if (i == 4) {
                         Grabed();
                     } else {
                         Default();
                     }
+                    // }
+                    active = false;
                 }
-                active = false;
 
             }
         }.start();
@@ -257,7 +276,7 @@ public class Pet {
                 frame.setBounds(frame.getLocation().x + 5, frame.getLocation().y, Pet.WinW, Pet.WinH);
             }
             try {
-                Thread.sleep(10);
+                Thread.sleep(Pet.SleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -279,7 +298,7 @@ public class Pet {
                 frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW, Pet.WinH);
             }
             try {
-                Thread.sleep(10);
+                Thread.sleep(Pet.SleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -294,7 +313,7 @@ public class Pet {
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
-                Thread.sleep(10);
+                Thread.sleep(Pet.SleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -310,7 +329,7 @@ public class Pet {
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
-                Thread.sleep(10);
+                Thread.sleep(Pet.SleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -326,7 +345,7 @@ public class Pet {
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
-                Thread.sleep(10);
+                Thread.sleep(Pet.SleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -364,8 +383,8 @@ public class Pet {
             trayIcon.setToolTip("小白\r\n状态：正在运行\r\n");
             // 创建弹出菜单
             PopupMenu popupMenu = new PopupMenu();
-            popupMenu.add(new MenuItem("帮助"));
-            popupMenu.add(new MenuItem("关于"));
+            // popupMenu.add(new MenuItem("帮助"));
+            // popupMenu.add(new MenuItem("关于"));
             popupMenu.add(new MenuItem("退出"));
 
             // 监听菜单点击事件
@@ -376,10 +395,6 @@ public class Pet {
                     // TODO Auto-generated method stub
                     String cmd = e.getActionCommand();
                     if (cmd == "帮助") {
-
-                    } else if (cmd == "关于") {
-
-                    } else if (cmd == "退出") {
                         System.exit(0);
                     }
                 }
