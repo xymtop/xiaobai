@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import java.awt.event.MouseAdapter;
 
 public class Pet {
@@ -63,12 +62,24 @@ public class Pet {
                     // 按鼠标中间
                     if (e.getButton() == 2) {
                         JPopupMenu popup = new JPopupMenu();
+                        JMenuItem wall = new JMenuItem("更换专属壁纸");
                         JMenuItem help = new JMenuItem("帮助");
                         JMenuItem about = new JMenuItem("关于");
                         JMenuItem hide = new JMenuItem("隐藏");
                         JMenuItem exit = new JMenuItem("退出");
 
                         // 菜单点击事件
+                        wall.addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                // reg add "hkcu\control panel\desktop" /v wallpaper /d "新壁纸地址(绝对地址）" /f
+                                WallPaper.ChangeOne();
+                            }
+
+                        });
+
                         help.addActionListener(new ActionListener() {
 
                             @Override
@@ -111,6 +122,7 @@ public class Pet {
 
                         });
 
+                        popup.add(wall);
                         popup.add(help);
                         popup.add(about);
                         popup.add(hide);

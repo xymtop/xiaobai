@@ -6,6 +6,7 @@ public class Command {
     // 运行cmd
     public static void RunCmd(String cmd) throws IOException {
         Runtime.getRuntime().exec(cmd);
+        System.out.println(cmd);
     }
 
     // 运行多个cmd

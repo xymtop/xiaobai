@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 public class Main {
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
-		Music.PlayMsg("你好呀我是小白");
+		Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\sayhi.mp3");
 		new Pet();
 	}
 
