@@ -7,8 +7,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.xymutil.MyWindow;
-
 public class MsgUi extends JFrame {
     JFrame frame;
     JLabel pet;

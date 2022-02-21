@@ -10,8 +10,6 @@ import java.awt.event.MouseMotionListener;
 
 import java.awt.event.MouseAdapter;
 
-import com.xymutil.*;
-
 public class Pet {
     JFrame frame;
     JLabel pet;
@@ -198,7 +196,6 @@ public class Pet {
         // 打开托盘
         Opentray();
         frame.setVisible(true);
-        Music.PlayWav("C:\\Windows\\Media\\Alarm01.wav");
 
     }
 
@@ -390,7 +387,8 @@ public class Pet {
                 e.printStackTrace();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "not support");
+            JOptionPane.showMessageDialog(null, "不支持桌面托盘");
         }
     }
+
 }
