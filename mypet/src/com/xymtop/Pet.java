@@ -198,6 +198,7 @@ public class Pet {
         // 打开托盘
         Opentray();
         frame.setVisible(true);
+        Music.PlayWav("C:\\Windows\\Media\\Alarm01.wav");
 
     }
 
