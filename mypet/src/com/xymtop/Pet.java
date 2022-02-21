@@ -29,7 +29,7 @@ public class Pet {
 
     public Pet() {
         frame = new JFrame("小白");
-        Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\start.mp3");
+
         msg = new MsgUi();
         popup = new JPopupMenu();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,7 +134,9 @@ public class Pet {
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 // TODO Auto-generated method stub
+                                msg.dispose();
                                 System.exit(0);
+
                             }
 
                         });
@@ -359,7 +361,7 @@ public class Pet {
             // 获取图片所在的URL,请把图片放在同一个包下
             // URL url = this.getClass().getResource("res/static/mylogo.png");
             // 实例化图像对象
-            ImageIcon icon = new ImageIcon("res/static/mylogo.jpg");
+            ImageIcon icon = new ImageIcon("res/static/pet.jpg");
             // 获得Image对象
             Image image = icon.getImage();
             // 创建托盘图标
@@ -394,7 +396,7 @@ public class Pet {
                 public void actionPerformed(ActionEvent e) {
                     // TODO Auto-generated method stub
                     String cmd = e.getActionCommand();
-                    if (cmd == "帮助") {
+                    if (cmd == "退出") {
                         System.exit(0);
                     }
                 }

@@ -5,6 +5,7 @@ package com.xymtop;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
@@ -48,19 +49,24 @@ public class MsgUi extends JFrame {
                 if (people == 0) {
                     // 和小白聊天
                     try {
-                        String str = new String(MyMsg.getBytes("iso8859-1"), "gbk");
+                        String n = new String(MyMsg.getBytes("UTF-8"), "GBK");
                         String data = HttpURLConnectionHelper.sendRequest(
-                                "https://api.ownthink.com/bot?appid=xiaosi&userid=user&spoken=" + str, "POST");
+                                "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + n, "POST");
                         System.out.println(data);
                         String[] BaiMsg = data.split("\"");
                         String Msg = BaiMsg[BaiMsg.length - 2];
-                        AddMsg("小白: " + Msg);
                         try {
-                            Music.PlayMsg(Msg);
+                            MyHttp.DownLoadMsg(Msg);
+                            Util.SleepExecSpeak(Msg, 3 * 1000);
                         } catch (NoSuchAlgorithmException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
                         }
+                        AddMsg("小白: " + Msg);
+
                     } catch (UnsupportedEncodingException e2) {
                         // TODO Auto-generated catch block
                         e2.printStackTrace();
@@ -69,12 +75,18 @@ public class MsgUi extends JFrame {
                 } else {
                     // 反馈
                     try {
-                        String str = new String(MyMsg.getBytes("iso8859-1"), "gbk");
-                        String str2 = new String("小白软件反馈".getBytes("iso8859-1"), "gbk");
+                        String n = new String(MyMsg.getBytes("UTF-8"), "GBK");
+                        String n2 = new String("小白软件反馈".getBytes("UTF-8"), "GBK");
                         String url = "https://api.dzzui.com/api/mail?Host=smtp.qq.com&Username=polarislovetop@qq.com&Password=pabqwbqicljmicfb&Port=465&SMTPSecure=ssl&addAddress=2283761246@qq.com&title="
-                                + str2 + "&text="
-                                + str;
+                                + n2 + "&text="
+                                + n;
                         HttpURLConnectionHelper.sendRequest(url, "POST");
+                        try {
+                            Music.PlayMsg("反馈成功，感谢你的支持");
+                        } catch (NoSuchAlgorithmException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
                         AddMsg("系统: 反馈成功！");
                     } catch (UnsupportedEncodingException e1) {
                         // TODO Auto-generated catch block
@@ -117,7 +129,7 @@ public class MsgUi extends JFrame {
     // 设置窗口是否显示
     public void SetView(Boolean flag) {
         if (flag) {
-            Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\chat.mp3");
+            Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\lib\\chat.mp3");
         }
         this.setVisible(flag);
     }

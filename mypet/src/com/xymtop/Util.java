@@ -145,4 +145,19 @@ public class Util {
 
     }
 
+    // 延迟一段时间播放音频
+    public static void SleepExecSpeak(String Msg, int min) {
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(min);
+                    Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\" + Msg + ".mp3");
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
 }
