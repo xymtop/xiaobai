@@ -18,6 +18,7 @@ public class Pet {
     static int WinH = 200;
     static int WinW = 200;
     static int SleepTime = 10;
+    static String ThePet = "other1";
     // falg
     boolean flag = true;
     // 人物是否活动
@@ -63,6 +64,11 @@ public class Pet {
 
                     // 按鼠标中间
                     if (e.getButton() == 2) {
+                        WalkDrop();
+                    }
+
+                    // 右键
+                    if (e.getButton() == 3) {
                         JPopupMenu popup = new JPopupMenu();
                         JMenuItem wall = new JMenuItem("更换专属壁纸");
                         JMenuItem chat = new JMenuItem("和我聊天");
@@ -150,11 +156,6 @@ public class Pet {
                         popup.show(e.getComponent(), e.getX(), e.getY());
                     }
 
-                    // 右键
-                    if (e.getButton() == 3) {
-                        WalkDrop();
-                    }
-
                 } else if (e.getClickCount() == 2) {
                     WalkDrop();
                 } else {
@@ -235,7 +236,7 @@ public class Pet {
         new Thread() {
             public void run() {
                 while (true) {
-                    // for (int i = 0; i <= 300; i++) {
+
                     int i = (int) (Math.random() * 5);
                     if (i == 0) {
                         Default();
@@ -250,7 +251,7 @@ public class Pet {
                     } else {
                         Default();
                     }
-                    // }
+
                     active = false;
                 }
 
