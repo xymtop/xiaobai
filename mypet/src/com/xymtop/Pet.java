@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.awt.event.MouseAdapter;
 
 public class Pet {
@@ -24,6 +25,7 @@ public class Pet {
     static int SleepTime = 100;
     static int ThePet = 1;
     static int PetCount = 1;
+    static long RunTime = 0;
 
     private String PetName;
     // falg
@@ -465,11 +467,14 @@ public class Pet {
 
             new Thread() {
                 public void run() {
+                    Pet.RunTime = new Date().getTime();
                     while (true) {
                         // 添加工具提示文本
                         trayIcon.setToolTip(
                                 "小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n" + "当前小白数量" + Pet.PetCount + "\r\n"
-                                        + "当前人物编号: " + Pet.ThePet + "号");
+                                        + "当前人物编号: " + Pet.ThePet + "号\r\n" + "当前窗口显示状态:" + !ishide + "\r\n"
+                                        + "本次已运行时长:" + String.valueOf((new Date().getTime() - Pet.RunTime) / 1000)
+                                        + "秒");
                         try {
                             sleep(1000);
                         } catch (InterruptedException e) {
