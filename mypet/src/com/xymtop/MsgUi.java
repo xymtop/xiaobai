@@ -56,12 +56,8 @@ public class MsgUi extends JFrame {
                         String[] BaiMsg = data.split("\"");
                         String Msg = BaiMsg[BaiMsg.length - 2];
                         try {
-                            MyHttp.DownLoadMsg(Msg);
-                            Util.SleepExecSpeak(Msg, 3 * 1000);
+                            Music.PlayMsg(Msg);
                         } catch (NoSuchAlgorithmException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        } catch (IOException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }

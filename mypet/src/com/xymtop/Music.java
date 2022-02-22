@@ -62,10 +62,26 @@ public class Music {
     public static void PlayMsg(String msg) throws NoSuchAlgorithmException {
         try {
             MyHttp.DownLoadMsg(msg);
-            Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\" + msg + ".mp3");
+            Music.PlayMusicSleep(msg, 3 * 1000);
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    // 延迟播放声音
+    public static void PlayMusicSleep(String Msg, int min) {
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(min);
+                    Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\" + Msg + ".mp3");
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 }

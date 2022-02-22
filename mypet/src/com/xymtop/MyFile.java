@@ -101,4 +101,10 @@ public class MyFile {
         return url;
     }
 
+    // 返回目录下文件的数量
+    public static int GetNum(String path) {
+        File file = new File(path);
+        int num = file.list().length;
+        return num;
+    }
 }

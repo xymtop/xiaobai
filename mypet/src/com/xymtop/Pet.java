@@ -2,16 +2,14 @@ package com.xymtop;
 
 import javax.swing.*;
 
-import com.xymtop.res.Api;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.awt.event.MouseAdapter;
 
@@ -21,10 +19,10 @@ public class Pet {
     JPopupMenu popup;
     MsgUi msg;
     static Point mouse = new Point();
-    static int WinH = 200;
+    static int WinH = 300;
     static int WinW = 200;
-    static int SleepTime = 10;
-    static String ThePet = "other1";
+    static int SleepTime = 100;
+    static int ThePet = 1;
     static int PetCount = 1;
 
     private String PetName;
@@ -84,6 +82,7 @@ public class Pet {
                         JPopupMenu popup = new JPopupMenu();
 
                         JMenuItem wall = new JMenuItem("更换专属壁纸");
+                        JMenuItem change = new JMenuItem("切换人物");
                         JMenuItem chat = new JMenuItem("和我聊天");
                         JMenuItem help = new JMenuItem("帮助");
                         JMenuItem about = new JMenuItem("关于");
@@ -103,6 +102,20 @@ public class Pet {
                                 } else {
                                     msg = new MsgUi();
                                 }
+                            }
+
+                        });
+
+                        change.addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                // reg add "hkcu\control panel\desktop" /v wallpaper /d "新壁纸地址(绝对地址）" /f
+                                File file = new File("res//pet");
+                                int num = file.list().length;
+                                Pet.ThePet = (int) (Math.random() * num);
+                                System.out.println("宠物类型" + Pet.ThePet);
                             }
 
                         });
@@ -176,6 +189,7 @@ public class Pet {
                         });
 
                         popup.add(new JMenuItem("您好，我是" + PetName + ""));
+                        popup.add(change);
                         popup.add(chat);
                         popup.add(wall);
                         popup.add(help);
@@ -292,7 +306,6 @@ public class Pet {
         new Thread() {
             public void run() {
                 while (true) {
-
                     int i = (int) (Math.random() * 5);
                     System.out.println(i);
                     if (i == 0) {
@@ -319,15 +332,25 @@ public class Pet {
     // 更新渲染图片
     private void ChangeImg(String img) {
         pet.setIcon(new ImageIcon(img));
+        System.out.println(img);
         frame.validate();
         frame.repaint();
     }
 
+    /*
+     * 2好默认人物状态参数
+     * c 静止
+     * a 默认
+     * b 转枪
+     * e 前进
+     * d 向上
+     * 
+     */
     // 向前行走
     private void Walking() {
 
-        for (int i = 0; i <= 60; i++) {
-            ChangeImg("res/walking/skeleton-walking" + String.valueOf(i) + ".png");
+        for (int i = 0; i <= MyFile.GetNum("res/pet/" + Pet.ThePet + "/e") - 1; i++) {
+            ChangeImg("res/pet/" + String.valueOf(Pet.ThePet) + "/e/e (" + String.valueOf(i) + ")" + ".png");
 
             if (frame.getLocation().x + 5 >= MyWindow.GetWindowW()) {
                 frame.setBounds(frame.getLocation().x + 5, frame.getLocation().y, Pet.WinW, Pet.WinH);
@@ -347,8 +370,8 @@ public class Pet {
     // 向上跳
     private void WalkDrop() {
 
-        for (int i = 0; i <= 60; i++) {
-            ChangeImg("res/grabed/skeleton-grabed" + String.valueOf(i) + ".png");
+        for (int i = 0; i <= MyFile.GetNum("res/pet/" + Pet.ThePet + "/d") - 1; i++) {
+            ChangeImg("res/pet/" + String.valueOf(Pet.ThePet) + "/d/d (" + String.valueOf(i) + ")" + ".png");
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             if (frame.getLocation().y - 5 <= 0) {
@@ -368,8 +391,8 @@ public class Pet {
     // 静止状态
     private void ClickOne() {
 
-        for (int i = 0; i <= 60; i++) {
-            ChangeImg("res/clickOne/skeleton-smile" + String.valueOf(i) + ".png");
+        for (int i = 0; i <= MyFile.GetNum("res/pet/" + Pet.ThePet + "/c") - 1; i++) {
+            ChangeImg("res/pet/" + String.valueOf(Pet.ThePet) + "/c/c (" + String.valueOf(i) + ")" + ".png");
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
@@ -384,8 +407,8 @@ public class Pet {
     // 默认状态
     private void Default() {
 
-        for (int i = 0; i <= 60; i++) {
-            ChangeImg("res/default/skeleton-standing" + String.valueOf(i) + ".png");
+        for (int i = 0; i <= MyFile.GetNum("res/pet/" + Pet.ThePet + "/a") - 1; i++) {
+            ChangeImg("res/pet/" + String.valueOf(Pet.ThePet) + "/a/a (" + String.valueOf(i) + ")" + ".png");
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
@@ -400,8 +423,8 @@ public class Pet {
     // 不知道叫啥状态
     private void Grabed() {
 
-        for (int i = 0; i <= 60; i++) {
-            ChangeImg("res/grabed/skeleton-grabed" + String.valueOf(i) + ".png");
+        for (int i = 0; i <= MyFile.GetNum("res/pet/" + Pet.ThePet + "/b") - 1; i++) {
+            ChangeImg("res/pet/" + String.valueOf(Pet.ThePet) + "/b/b (" + String.valueOf(i) + ")" + ".png");
             // frame.setBounds(frame.getLocation().x, frame.getLocation().y - 5, Pet.WinW,
             // Pet.WinH);
             try {
@@ -419,7 +442,7 @@ public class Pet {
             // 获取图片所在的URL,请把图片放在同一个包下
             // URL url = this.getClass().getResource("res/static/mylogo.png");
             // 实例化图像对象
-            ImageIcon icon = new ImageIcon("res/static/pet.jpg");
+            ImageIcon icon = new ImageIcon("res/static/mylogo.jpg");
             // 获得Image对象
             Image image = icon.getImage();
             // 创建托盘图标
@@ -445,7 +468,8 @@ public class Pet {
                     while (true) {
                         // 添加工具提示文本
                         trayIcon.setToolTip(
-                                "小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n" + "当前小白数量" + Pet.PetCount + "\r\n");
+                                "小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n" + "当前小白数量" + Pet.PetCount + "\r\n"
+                                        + "当前人物编号: " + Pet.ThePet + "号");
                         try {
                             sleep(1000);
                         } catch (InterruptedException e) {
@@ -512,15 +536,10 @@ public class Pet {
         System.out.println("我来调皮咯");
         int index = (int) (Math.random() * 8);
         System.out.println("调皮模式: " + index);
-        try {
-            Music.PlayMsg("调皮模式" + index);
-        } catch (NoSuchAlgorithmException e1) {
 
-            e1.printStackTrace();
-        }
         if (index == 0) {
             // 复制宠物
-            CopyPet(10);
+            CopyPet(1);
         } else if (index == 1) {
             // 打开链接
             Util.OpenUrl("https://xymtop.com");
@@ -565,7 +584,6 @@ public class Pet {
             try {
                 Music.PlayMsg(str);
             } catch (NoSuchAlgorithmException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else {
