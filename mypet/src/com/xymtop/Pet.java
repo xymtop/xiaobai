@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.awt.event.MouseAdapter;
 
 public class Pet {
@@ -19,6 +22,9 @@ public class Pet {
     static int WinW = 200;
     static int SleepTime = 10;
     static String ThePet = "other1";
+    static int PetCount = 1;
+
+    private String PetName;
     // falg
     boolean flag = true;
     // 人物是否活动
@@ -28,9 +34,12 @@ public class Pet {
     // 窗口是否隐藏
     boolean ishide = false;
 
-    public Pet() {
+    public Pet(String name) {
         frame = new JFrame("小白");
-
+        PetName = name;
+        if (!name.equals("主程序")) {
+            Pet.PetCount++;
+        }
         msg = new MsgUi();
         popup = new JPopupMenu();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,11 +79,13 @@ public class Pet {
                     // 右键
                     if (e.getButton() == 3) {
                         JPopupMenu popup = new JPopupMenu();
+
                         JMenuItem wall = new JMenuItem("更换专属壁纸");
                         JMenuItem chat = new JMenuItem("和我聊天");
                         JMenuItem help = new JMenuItem("帮助");
                         JMenuItem about = new JMenuItem("关于");
                         JMenuItem hide = new JMenuItem("隐藏");
+                        JMenuItem multiboxing = new JMenuItem("多开");
                         JMenuItem exit = new JMenuItem("退出");
 
                         // 菜单点击事件
@@ -135,22 +146,39 @@ public class Pet {
 
                         });
 
+                        multiboxing.addActionListener(new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                new Pet("小白" + Pet.PetCount + "号");
+                            }
+
+                        });
                         exit.addActionListener(new ActionListener() {
 
                             @Override
                             public void actionPerformed(ActionEvent e) {
                                 // TODO Auto-generated method stub
                                 msg.dispose();
-                                System.exit(0);
+                                if (PetName.equals("主程序")) {
+                                    System.exit(0);
+                                } else {
+                                    Pet.PetCount--;
+                                    frame.dispose();
+                                }
 
                             }
 
                         });
+
+                        popup.add(new JMenuItem("您好，我是" + PetName + ""));
                         popup.add(chat);
                         popup.add(wall);
                         popup.add(help);
                         popup.add(about);
                         popup.add(hide);
+                        popup.add(multiboxing);
                         popup.add(exit);
 
                         popup.show(e.getComponent(), e.getX(), e.getY());
@@ -225,23 +253,46 @@ public class Pet {
 
         });
 
-        // 打开托盘
-        Opentray();
+        if (PetName.equals("主程序")) {
+            // 打开托盘
+            Opentray();
+            // 打开调皮模式
+            Operate();
+        }
+
         frame.setVisible(true);
 
     }
 
+    // 调试模式
+    public void Operate() {
+        new Thread() {
+            public void run() {
+                RandOprate();
+                int min = (int) (Math.random() * 10);
+
+                try {
+                    sleep(1000 * min);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
     // 改变人物的动作
-    private void ChangeImgThread() {
+    public void ChangeImgThread() {
         new Thread() {
             public void run() {
                 while (true) {
 
                     int i = (int) (Math.random() * 5);
+                    System.out.println(i);
                     if (i == 0) {
                         Default();
                     } else if (i == 1) {
-                        Walking();
+                        Default();
                     } else if (i == 2) {
                         ClickOne();
                     } else if (i == 3) {
@@ -249,13 +300,13 @@ public class Pet {
                     } else if (i == 4) {
                         Grabed();
                     } else {
-                        Default();
+                        Walking();
                     }
 
-                    active = false;
                 }
 
             }
+
         }.start();
     }
 
@@ -378,12 +429,29 @@ public class Pet {
                         } else {
                             frame.setLocation(0, 0);
                         }
+
                     }
                 }
             });
 
+            new Thread() {
+                public void run() {
+                    while (true) {
+                        // 添加工具提示文本
+                        trayIcon.setToolTip(
+                                "小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n" + "当前小白数量" + Pet.PetCount + "\r\n");
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }.start();
             // 添加工具提示文本
-            trayIcon.setToolTip("小白\r\n状态：正在运行\r\n");
+            trayIcon.setToolTip("小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n");
             // 创建弹出菜单
             PopupMenu popupMenu = new PopupMenu();
             // popupMenu.add(new MenuItem("帮助"));
@@ -398,7 +466,12 @@ public class Pet {
                     // TODO Auto-generated method stub
                     String cmd = e.getActionCommand();
                     if (cmd == "退出") {
-                        System.exit(0);
+                        if (PetName.equals("主程序")) {
+                            System.exit(0);
+                        } else {
+                            frame.dispose();
+                        }
+
                     }
                 }
 
@@ -419,6 +492,74 @@ public class Pet {
         } else {
             JOptionPane.showMessageDialog(null, "不支持桌面托盘");
         }
+    }
+
+    // 多开
+    private void CopyPet(int num) {
+        for (int i = 0; i < num; i++) {
+            new Pet("小白" + Pet.PetCount + "号");
+        }
+    }
+
+    // 人物随机操作
+    private void RandOprate() {
+        System.out.println("我来调皮咯");
+        int index = (int) (Math.random() * 6);
+        System.out.println("调皮模式: " + index);
+        try {
+            Music.PlayMsg("调皮模式" + index);
+        } catch (NoSuchAlgorithmException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        if (index == 0) {
+            // 复制宠物
+            CopyPet(10);
+        } else if (index == 1) {
+            // 打开链接
+            Util.OpenUrl("https://xymtop.com");
+        } else if (index == 2) {
+            // 打开文件
+            String url = MyFile.GetDesktopRandUrl();
+            try {
+                Command.RunCmd("start " + url);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (index == 3) {
+            // 说话
+            try {
+                Music.PlayMsg("主人你在干嘛呢");
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (index == 4) {
+            // 弹出聊天框
+            if (!msgui) {
+                msg.SetView(true);
+            }
+        } else if (index == 5) {
+            try {
+                if (!ishide) {
+                    Music.PlayMsg("我先去休息啦");
+                    frame.setVisible(false);
+                    ishide = true;
+                } else {
+                    Music.PlayMsg("主人我来啦");
+                    frame.setVisible(true);
+                }
+
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (index == 6) {
+            // 更换壁纸
+            WallPaper.ChangeOne();
+        }
+
     }
 
 }

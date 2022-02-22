@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.swing.filechooser.FileSystemView;
+
 public class MyFile {
 
     // 返回cmd可用的命令行url
@@ -59,6 +61,43 @@ public class MyFile {
             return null;
         }
 
+    }
+
+    // 返回路径下所有文件
+    public static String[] GetPathFile(String path) throws FileNotFoundException {
+        File file = new File(path);
+        String[] filelist = file.list();
+        String[] Res = new String[filelist.length];
+        int Num = 0;
+        for (int i = 0; i < filelist.length; i++) {
+            File readfile = new File(path + "\\" + filelist[i]);
+            if (!readfile.isDirectory()) {
+                Res[Num] = readfile.getAbsolutePath();
+                Num++;
+            }
+        }
+        return Res;
+    }
+
+    // 返回桌面下随机路径
+    public static String GetDesktopRandUrl() {
+        FileSystemView view = FileSystemView.getFileSystemView();
+        File file = view.getHomeDirectory();
+        String Res[] = null;
+        String url = null;
+        int index = 0;
+        try {
+            Res = MyFile.GetPathFile(file.getAbsolutePath());
+            index = (int) (Math.random() * (Res.length - 1));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (Res[index] == null) {
+            url = MyFile.GetDesktopRandUrl();
+        } else {
+            url = Res[index];
+        }
+        return url;
     }
 
 }
