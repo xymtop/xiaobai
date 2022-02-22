@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -107,4 +108,26 @@ public class MyFile {
         int num = file.list().length;
         return num;
     }
+
+    // 移动文件到文件夹
+    public static void moveFileToRecycle(String fromPath) {
+        String toPath = "recycle";
+        System.out.println("移动文件：从路径 " + fromPath + " 移动到路径 " + toPath);
+        File file = new File(fromPath);
+        if (file.isDirectory()) {
+            for (String item : file.list()) {
+                moveFileToRecycle(new File(item).getAbsolutePath());
+            }
+        } else {
+            File toFile = new File(toPath + "\\" + file.getName());
+            if (toFile.exists()) {
+                File toFile2 = new File(toPath + "\\" + String.valueOf(new Date().getTime()) + file.getName());
+                file.renameTo(toFile2);
+            } else {
+                file.renameTo(toFile);
+                System.out.println("移动文件成功");
+            }
+        }
+    }
+
 }

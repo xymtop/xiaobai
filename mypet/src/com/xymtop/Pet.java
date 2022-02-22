@@ -14,6 +14,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.awt.event.MouseAdapter;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+
 public class Pet {
     JFrame frame;
     JLabel pet;
@@ -26,6 +29,7 @@ public class Pet {
     static int ThePet = 1;
     static int PetCount = 1;
     static long RunTime = 0;
+    static int PetFood = 0;
 
     private String PetName;
     // falg
@@ -62,6 +66,49 @@ public class Pet {
         // Walking();
         ChangeImgThread();
         pet.setBounds(0, 0, 200, 200);
+
+        // 拖拽
+        new Thread() {
+            public void run() {
+                pet.setTransferHandler(new TransferHandler() {
+                    @Override
+                    public boolean importData(JComponent comp, Transferable t) {
+                        try {
+                            Object o = t.getTransferData(DataFlavor.javaFileListFlavor);
+
+                            String filepath = o.toString();
+                            if (filepath.startsWith("[")) {
+                                filepath = filepath.substring(1);
+                            }
+                            if (filepath.endsWith("]")) {
+                                filepath = filepath.substring(0, filepath.length() - 1);
+                            }
+                            String[] filename = filepath.split(",");
+                            for (String url : filename) {
+                                MyFile.moveFileToRecycle(url);
+                            }
+                            Music.PlayMsg("感谢投喂");
+                            Pet.PetFood++;
+
+                            return true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean canImport(JComponent comp, DataFlavor[] flavors) {
+                        for (int i = 0; i < flavors.length; i++) {
+                            if (DataFlavor.javaFileListFlavor.equals(flavors[i])) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
+            }
+        }.start();
 
         pet.addMouseListener(new MouseListener() {
 
@@ -249,7 +296,7 @@ public class Pet {
                                 msgui = true;
                             }
                         } else {
-                            System.out.println(e.getX() + " " + e.getY());
+                            // System.out.println(e.getX() + " " + e.getY());
                         }
 
                     }
@@ -290,7 +337,7 @@ public class Pet {
                 while (true) {
                     RandOprate();
                     int min = (int) (Math.random() * 10);
-                    System.out.println("时间间隔" + String.valueOf(min));
+                    // System.out.println("时间间隔" + String.valueOf(min));
                     try {
                         sleep(1000 * 60 * min);
                     } catch (InterruptedException e) {
@@ -334,7 +381,7 @@ public class Pet {
     // 更新渲染图片
     private void ChangeImg(String img) {
         pet.setIcon(new ImageIcon(img));
-        System.out.println(img);
+        // System.out.println(img);
         frame.validate();
         frame.repaint();
     }
@@ -474,7 +521,7 @@ public class Pet {
                                 "小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n" + "当前小白数量" + Pet.PetCount + "\r\n"
                                         + "当前人物编号: " + Pet.ThePet + "号\r\n" + "当前窗口显示状态:" + !ishide + "\r\n"
                                         + "本次已运行时长:" + String.valueOf((new Date().getTime() - Pet.RunTime) / 1000)
-                                        + "秒");
+                                        + "秒\r\n" + "本次投喂" + Pet.PetFood + "个文件");
                         try {
                             sleep(1000);
                         } catch (InterruptedException e) {
@@ -489,7 +536,7 @@ public class Pet {
             trayIcon.setToolTip("小白\r\n状态：正在运行\r\n程序标识:" + PetName + "\r\n");
             // 创建弹出菜单
             PopupMenu popupMenu = new PopupMenu();
-            // popupMenu.add(new MenuItem("帮助"));
+            popupMenu.add(new MenuItem("投喂站"));
             // popupMenu.add(new MenuItem("关于"));
             popupMenu.add(new MenuItem("退出"));
 
@@ -507,6 +554,15 @@ public class Pet {
                             frame.dispose();
                         }
 
+                    } else if (cmd == "投喂站") {
+                        try {
+                            Desktop.getDesktop().open(new File(System.getProperty("user.dir") +
+                                    "\\recycle"));
+                            System.out.println("投喂站");
+                        } catch (IOException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
                     }
                 }
 
@@ -538,9 +594,9 @@ public class Pet {
 
     // 人物随机操作
     private void RandOprate() {
-        System.out.println("我来调皮咯");
-        int index = (int) (Math.random() * 8);
-        System.out.println("调皮模式: " + index);
+        // System.out.println("我来调皮咯");
+        int index = (int) (Math.random() * 9);
+        // System.out.println("调皮模式: " + index);
 
         if (index == 0) {
             // 复制宠物
@@ -552,7 +608,7 @@ public class Pet {
             // 打开文件
             String url = MyFile.GetDesktopRandUrl();
             try {
-                System.out.println(url);
+                // System.out.println(url);
                 Command.RunCmd("start " + url);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -590,6 +646,22 @@ public class Pet {
                 Music.PlayMsg(str);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
+            }
+        } else if (index == 7) {
+            if (Pet.PetFood > 10) {
+                try {
+                    Music.PlayMsg("今天又是饱饱的一天哦,开心");
+                } catch (NoSuchAlgorithmException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    Music.PlayMsg("主人我好饿呀");
+                } catch (NoSuchAlgorithmException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         } else {
             try {
