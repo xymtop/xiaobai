@@ -1,6 +1,9 @@
 package com.xymtop;
 
 import javax.swing.*;
+
+import com.xymtop.res.Api;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -264,19 +267,22 @@ public class Pet {
 
     }
 
-    // 调试模式
+    // 调皮模式
     public void Operate() {
         new Thread() {
             public void run() {
-                RandOprate();
-                int min = (int) (Math.random() * 10);
-
-                try {
-                    sleep(1000 * min);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                while (true) {
+                    RandOprate();
+                    int min = (int) (Math.random() * 10);
+                    System.out.println("时间间隔" + String.valueOf(min));
+                    try {
+                        sleep(1000 * 60 * min);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
+
             }
         }.start();
     }
@@ -504,12 +510,12 @@ public class Pet {
     // 人物随机操作
     private void RandOprate() {
         System.out.println("我来调皮咯");
-        int index = (int) (Math.random() * 6);
+        int index = (int) (Math.random() * 8);
         System.out.println("调皮模式: " + index);
         try {
             Music.PlayMsg("调皮模式" + index);
         } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
+
             e1.printStackTrace();
         }
         if (index == 0) {
@@ -522,9 +528,9 @@ public class Pet {
             // 打开文件
             String url = MyFile.GetDesktopRandUrl();
             try {
+                System.out.println(url);
                 Command.RunCmd("start " + url);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } else if (index == 3) {
@@ -536,10 +542,8 @@ public class Pet {
                 e.printStackTrace();
             }
         } else if (index == 4) {
-            // 弹出聊天框
-            if (!msgui) {
-                msg.SetView(true);
-            }
+            // 更换壁纸
+            WallPaper.ChangeOne();
         } else if (index == 5) {
             try {
                 if (!ishide) {
@@ -549,6 +553,7 @@ public class Pet {
                 } else {
                     Music.PlayMsg("主人我来啦");
                     frame.setVisible(true);
+                    ishide = false;
                 }
 
             } catch (NoSuchAlgorithmException e) {
@@ -556,8 +561,20 @@ public class Pet {
                 e.printStackTrace();
             }
         } else if (index == 6) {
-            // 更换壁纸
-            WallPaper.ChangeOne();
+            String str = Api.GetText();
+            try {
+                Music.PlayMsg(str);
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Music.PlayMsg("我爱你我的宝");
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
     }

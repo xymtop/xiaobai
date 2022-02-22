@@ -92,6 +92,7 @@ public class MyFile {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         if (Res[index] == null) {
             url = MyFile.GetDesktopRandUrl();
         } else {
