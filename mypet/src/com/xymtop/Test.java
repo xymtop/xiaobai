@@ -9,8 +9,6 @@ import javax.swing.JOptionPane;
 
 public class Test {
     public static void main(String[] args) throws IOException {
-        String content = "\u4f60\u597d\u5440";
-        System.out.println();
 
     }
 
