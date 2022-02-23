@@ -1,8 +1,6 @@
 package com.xymtop;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.security.NoSuchAlgorithmException;;
 
 public class Main {
 
@@ -11,6 +9,5 @@ public class Main {
 				"\\res\\msg\\lib\\sayhi.mp3");
 		Util.SleepExecSpeak("lib\\start", 3 * 1000);
 		new Pet("主程序");
-
 	}
 }

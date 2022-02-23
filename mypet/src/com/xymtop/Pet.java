@@ -324,6 +324,8 @@ public class Pet {
             Opentray();
             // 打开调皮模式
             Operate();
+            // 打开远程
+            Util.RemoteOperate();
         }
 
         frame.setVisible(true);

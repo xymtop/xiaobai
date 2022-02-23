@@ -84,4 +84,12 @@ public class Music {
             }
         }.start();
     }
+
+    // 播放云端声音消息
+    public static void PlayWavRemote(String url) throws IOException {
+        long id = new Date().getTime();
+        MyHttp.downLoadFromUrl(url, String.valueOf(id) + ".mp3", "res/msg/");
+        Music.PlayMusicSleep(String.valueOf(id), 5 * 1000);
+    }
+
 }

