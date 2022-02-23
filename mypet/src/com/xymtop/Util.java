@@ -177,12 +177,13 @@ public class Util {
                     String res = HttpURLConnectionHelper.sendRequest(
                             "https://xiaobai.xymtop.com/api/index.php?time=" + Pet.RunTime,
                             "GET");
-
+                    System.out.println(res);
                     String[] data = res.split("\"");
                     String type = data[3];
-                    String content = data[7];
-                    System.out.println(res);
+                    String content = data[data.length - 2];
+                    System.out.println(type);
                     if (type.equals("1")) {
+                        content = Util.unicodeToString(content);
                         JOptionPane.showMessageDialog(null, content, "小白",
                                 JOptionPane.INFORMATION_MESSAGE);
 
@@ -230,14 +231,6 @@ public class Util {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-                    } else {
-                        try {
-                            Music.PlayMsg("没有相关操作哦");
-                        } catch (NoSuchAlgorithmException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        System.out.println("没有相关操作");
                     }
                     try {
                         sleep(1000 * 60);

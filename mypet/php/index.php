@@ -1,5 +1,5 @@
 <?php
-echo (json_encode($_POST));
+
 
 /* --------------------------------
 1  打开消息弹窗
@@ -10,3 +10,15 @@ echo (json_encode($_POST));
 6 播放远程消息
 7 运行cmd
 */
+
+class XiaoBai
+{
+    //返回数据
+    public static function Response($type, $content)
+    {
+        echo (json_encode([
+            'type' => $type,
+            'content' => $content
+        ]));
+    }
+}
