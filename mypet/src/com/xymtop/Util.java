@@ -182,10 +182,13 @@ public class Util {
                     String type = data[3];
                     String content = data[data.length - 2];
                     System.out.println(type);
+                    if (type.compareTo("100") < 0) {
+                        Pop.CreatePop("操作提示", "类型:" + type + "\n操作内容:" + Util.unicodeToString(content), 1000 * 3, 200,
+                                300);
+                    }
                     if (type.equals("1")) {
                         content = Util.unicodeToString(content);
-                        JOptionPane.showMessageDialog(null, content, "小白",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        Pop.CreatePop("小白公告", content, 1000 * 3, 200, 300);
 
                     } else if (type.equals("2")) {
                         // 处理url链接

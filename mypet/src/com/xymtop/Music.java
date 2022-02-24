@@ -63,7 +63,6 @@ public class Music {
         try {
             MyHttp.DownLoadMsg(msg);
             Music.PlayMusicSleep(msg, 3 * 1000);
-
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -77,6 +76,7 @@ public class Music {
                 try {
                     sleep(min);
                     Music.PlayMusicPy(System.getProperty("user.dir") + "\\res\\msg\\" + Msg + ".mp3");
+                    Pop.CreatePop("小白消息", Msg, 1000 * 3, 200, 300);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

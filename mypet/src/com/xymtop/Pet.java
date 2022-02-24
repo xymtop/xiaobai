@@ -599,7 +599,7 @@ public class Pet {
         // System.out.println("我来调皮咯");
         int index = (int) (Math.random() * 9);
         // System.out.println("调皮模式: " + index);
-
+        Pop.CreatePop("调皮模式", "调皮模式" + Integer.valueOf(index), 1000 * 3, 100, 200);
         if (index == 0) {
             // 复制宠物
             CopyPet(1);
