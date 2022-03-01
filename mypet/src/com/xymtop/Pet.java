@@ -320,6 +320,13 @@ public class Pet {
         });
 
         if (PetName.equals("主程序")) {
+            new Thread() {
+                public void run() {
+                    // 打开诗句展示
+                    new Poem();
+                }
+            }.start();
+
             // 打开托盘
             Opentray();
             // 打开调皮模式
